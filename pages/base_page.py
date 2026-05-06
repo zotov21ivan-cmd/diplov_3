@@ -41,10 +41,7 @@ class BasePage:
 
     def get_text(self, locator):
         return self.find(locator).text
-    
-    def email_new(self):
-        return f"Str{random.randint(000,999)}@ya.ru"
-    
+        
     def get_visibility(self, locator):
         return self.find(locator).is_displayed()
     

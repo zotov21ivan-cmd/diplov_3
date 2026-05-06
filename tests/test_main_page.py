@@ -45,8 +45,7 @@ class TestMainPage:
 
         with allure.step('Проверка заголовка "Лента заказов"'):
             order_page = OrdersPage(driver)
-            message = order_page.get_status_orders()
-            assert 'Лента заказов' in message
+            assert order_page.check_display_orders_header(), "Заголовок 'Лента заказов' не отобразился"
 
     # Тест успешного перехода на раздел «Лента заказов» для зарегистрированного пользователя
     @allure.title('Переход на "Лента заказов" для зарегистрированного пользователя')
@@ -99,9 +98,8 @@ class TestMainPage:
             main_page.click_button(MainPageLocators.INGREDIENT_ITEMS)
 
         with allure.step('Проверка видимости заголовка во всплывающем окне'):
-            main_page.get_visibility(MainPageLocators.WINDOW_TEXT_INGREDIENT)
-            present = main_page.get_enabled(MainPageLocators.MAIN_BURGER_SECTION)
-            assert present
+            assert main_page.check_visibility_of_element(MainPageLocators.WINDOW_TEXT_INGREDIENT), \
+            "Всплывающее окно с деталями ингредиента не появилось"
 
     @allure.description('Проверяет закрытие всплывающего окна с информацией об ингредиенте')
     def test_success_select_ingredient_close(self, driver):
@@ -121,8 +119,7 @@ class TestMainPage:
             main_page.click_button(MainPageLocators.WINDOW_CROSS_INGREDIENT)
 
         with allure.step('Проверка доступности секции "Соберите бургер"'):
-            present = main_page.get_enabled(MainPageLocators.MAIN_BURGER_SECTION)
-            assert present
+            assert main_page.is_main_section_displayed(),'Секция "Соберите бургер" не отобразилась после закрытия модального окна'
 
     @allure.title('Добавление ингредиента и проверка счётчика')
     @allure.description('Проверяет увеличение счётчика ингредиентов при добавлении нового ингредиента в заказ')

@@ -102,13 +102,12 @@ class TestOrderPageCountAlls:
         with allure.step('Закрытие всплывающего окна щелчком вне его области'):
             main_page.click_button(MainPageLocators.OUT_WINDOW_BODY)
 
-        with allure.step('Ожидание отображения заказа в разделе "В работе"'):
+        with allure.step('Переход на страницу ленты заказов'):
             order_page.open_orders_page()
-            order_id_work = order_page.get_text(OrderFeedPageLocators.ORDER_ID_WORK)
-            while True:
-                order_id_work = order_page.get_text(OrderFeedPageLocators.ORDER_ID_WORK)
-                if int(order_id) == int(order_id_work):
-                    break
 
         with allure.step('Подтверждение отображения заказа в разделе "В работе"'):
-            assert int(order_id_work) == int(order_id)
+            # Используем метод, который ждет, пока текст элемента станет равен order_id
+            # Если за 10-15 секунд не дождется — вернет False
+            is_order_visible = order_page.wait_for_order_in_work(order_id)
+        
+            assert is_order_visible, f"Заказ {order_id} не появился в разделе 'В работе' за отведенное время"
